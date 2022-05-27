@@ -1,2 +1,15 @@
-int some_int := 1
-str some_str := "test"
+int some_int <- 1
+str some_str <- "test"
+
+print("hi!")
+print("hello!")
+
+if some_int > 2 {
+    print("not 2!", pretty = true)
+} else if some_int > 3 {
+    print("it's 3!!")
+} else {
+    print("it is")
+    print("You've passed!")
+    print("wooo")
+}

@@ -1,0 +1,172 @@
+
+start: singleton*
+
+// Expression
+?expression : scope
+            | operation
+            | literal
+            | identifier
+
+?singleton : expression~1
+
+// Meta
+?scope : block
+       | group
+       | function_call
+       | function_definition
+       | if
+       | for
+       | while
+       | return
+
+?operation  : (b_not | not)
+            | exponentation
+            | (multiplication | division | modulo)
+            | (addition | subtraction)
+            | (b_left_shift | b_right_shift)
+            | (less_than | less_than_equal | greater_than | greater_than_equal)
+            | (is | is_not)
+            | b_and
+            | b_xor
+            | b_or
+            | and
+            | or
+            | (assignment_typed | assignment_untyped)
+
+// Scoping & Precedence
+?block : "{" expression* "}"
+?group : "(" expression ")"
+
+
+// Declarations
+// - Typed   : <type> <identifier> 
+// - Untyped : <identifier>
+?declaration_typed   : type identifier
+?declaration_untyped : identifier
+
+
+// Assignment:
+// - Typed            : <typed decl> <- <expr>
+// - Untyped          : <untyped decl> <- <expr>
+// - Typed Argument   : <typed decl> = <expr>
+// - Untyped Argument : <untyped decl> = <expr>
+//
+// Typed/Untyped assignment is used for standard variable assignment in any context.
+// Typed/Untyped argument assignment is used within function calls.
+assignment_typed            : type assignment_untyped
+assignment_untyped          : identifier "<-" singleton
+assignment_argument_typed   : type assignment_argument_untyped
+assignment_argument_untyped : identifier "=" singleton
+
+
+// Argument Lists
+// - Definition : (<typed decl> | <typed arg assign>) (, (<typed decl> | <typed arg assign>) )*
+// - Call : (<expr> | <untyped arg assign>) (, (<expr> | <untyped arg assign>) )
+argument_list_definition : (declaration_typed | assignment_argument_typed) ("," (declaration_typed | assignment_argument_typed))*
+?argument_list_call : argument ("," argument)*
+
+argument: (positional_argument | named_argument)
+?positional_argument : singleton
+?named_argument: assignment_argument_untyped
+
+
+// Function
+// - Definition : ( <arglist> ) [: <return type>] => { <expr> }
+// - Call       : <expr>( <function arguments> )
+// - Arguments  : (<positional argument list> | <named argument list>)*
+function_definition : "(" argument_list_definition? ")" [":" type] "=>" block
+function_call       : identifier "(" function_arguments? ")"
+?function_arguments : argument_list_call
+
+
+// Arithmetic
+// - Addition       : <expr> + <expr>
+// - Subtraction    : <expr> - <expr>
+// - Multiplication : <expr> * <expr>
+// - Division       : <expr> / <expr>
+// - Modulo         : <expr> % <expr>
+// - Exp            : <expr> ^ <expr>
+addition       : singleton "+" singleton
+subtraction    : singleton "-" singleton
+multiplication : singleton "*" singleton
+division       : singleton "/" singleton
+modulo         : singleton "%" singleton
+exponentation  : singleton "^" singleton
+
+// Logic
+// - AND        : <expr> (and | &&) <expr>
+// - OR         : <expr> (or | ||) <expr>
+// - NOT        : (not | !) <expr>
+// - IS         : <expr> (is | ==) <expr>
+// - ISN        : <expr> != <expr> // Special case for when user doesn't want to use <expr> is not <expr>
+// - Comparator : <expr> (< | <= | > | >=) <expr>
+and                : singleton "and" singleton
+or                 : singleton "or" singleton
+not                : ("not" | "!") singleton
+is                 : singleton ("is" | "==") singleton
+is_not             : singleton "!=" singleton
+less_than          : singleton "<" singleton
+less_than_equal    : singleton "<=" singleton
+greater_than       : singleton ">" singleton
+greater_than_equal : singleton ">=" singleton
+
+
+// Bitwise
+// - AND    : <expr> & <expr>
+// - OR     : <expr> | <expr>
+// - LSHIFT : <expr> << <expr>
+// - RSHIFT : <expr> >> <expr>
+// - NOT    : ~<expr>
+// - XOR    : <expr> xor <expr>
+b_and         : singleton "&" singleton
+b_or          : singleton "|" singleton
+b_left_shift  : singleton "<<" singleton
+b_right_shift : singleton ">>" singleton
+b_not         : "~" singleton
+b_xor         : singleton "^^" singleton
+
+
+// Statements
+// - IF     : if <expr> { <expr> } (else if <expr> { <expr> })* (else { <expr> })?
+// - FOR    : for <identifier> in <expr> { <expr> }
+// - WHILE  : while <expr> { <expr> }
+// - RETURN : return <expr>?
+if         : "if" singleton block ("else" "if" singleton block)* ["else" block]
+for        : "for" identifier "in" singleton block
+while      : "while" singleton block
+return     : "return" [singleton]
+
+
+// Primitives & Misc.
+type        : KEY_INT
+            | KEY_DEC
+            | KEY_BOOL
+            | KEY_STR
+            | KEY_BYTE
+?literal    : number
+            | boolean
+            | string
+            | byte
+number     : LIT_NUM
+byte       : LIT_BYTE
+string     : LIT_STR
+!boolean   : "true" | "false"
+identifier : IDENTIFIER
+
+COMMENT           : "#" /[^\n]*/ "\n"
+MULTILINE_COMMENT : /(?s)(#>>).*?(<<#(\n|\Z))/
+LIT_BYTE          : "0x" /[0-9a-fA-F]+/
+KEY_INT           : "int"
+KEY_DEC           : "dec"
+KEY_BOOL          : "bool"
+KEY_STR           : "str"
+KEY_BYTE          : "byte"
+
+%import common.CNAME          -> IDENTIFIER
+%import common.ESCAPED_STRING -> LIT_STR
+%import common.SIGNED_NUMBER  -> LIT_NUM
+%import common.WS
+
+%ignore WS
+%ignore COMMENT
+%ignore MULTILINE_COMMENT

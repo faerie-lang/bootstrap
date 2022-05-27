@@ -1,5 +1,5 @@
 # a function
-fib => (int x) : int {
+fib <- (int x) : int => {
     if x < 3 {
         # Needs a starting value
         return 1
@@ -13,12 +13,12 @@ fib => (int x) : int {
 } # end fib
 
 # a procedure
-shout => (str x, ) {
+shout <- (str x, int y) => {
     print(x)
 }
 
-printer => (str name, int start: 0) {
-    for i in start:10 {
+printer <- (str name, int start = 0) => {
+    for i in 2 {
         print(name)
         print(i)
     }
