@@ -1,5 +1,12 @@
-int some_int <- 1
+int some_int <- [1]
+int some_int2 <- 1
 str some_str <- "test"
+
+int int_vec <- [1, 2, 3]
+
+# this evals to true
+print(some_int == some_int2)
+
 
 print("hi!")
 print("hello!")

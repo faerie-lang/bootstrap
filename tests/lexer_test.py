@@ -1,5 +1,5 @@
-from faerie.lexer import Lexer
-from faerie.token import Token, TokenType
+from faerie._lexer import Lexer
+from faerie._token import Token, TokenType
 import unittest
 
 

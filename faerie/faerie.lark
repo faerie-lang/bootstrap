@@ -78,7 +78,6 @@ function_definition : "(" argument_list_definition? ")" [":" type] "=>" block
 function_call       : identifier "(" function_arguments? ")"
 ?function_arguments : argument_list_call
 
-
 // Arithmetic
 // - Addition       : <expr> + <expr>
 // - Subtraction    : <expr> - <expr>
@@ -147,11 +146,13 @@ type        : KEY_INT
             | boolean
             | string
             | byte
+            | vector
 number     : LIT_NUM
 byte       : LIT_BYTE
 string     : LIT_STR
 !boolean   : "true" | "false"
 identifier : IDENTIFIER
+vector     : "[" singleton ("," singleton)* "]"
 
 COMMENT           : "#" /[^\n]*/ "\n"
 MULTILINE_COMMENT : /(?s)(#>>).*?(<<#(\n|\Z))/
