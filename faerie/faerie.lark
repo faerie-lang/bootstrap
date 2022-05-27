@@ -137,16 +137,16 @@ return     : "return" [singleton]
 
 
 // Primitives & Misc.
-type        : KEY_INT
-            | KEY_DEC
-            | KEY_BOOL
-            | KEY_STR
-            | KEY_BYTE
-?literal    : number
-            | boolean
-            | string
-            | byte
-            | vector
+type       : KEY_INT
+           | KEY_DEC
+           | KEY_BOOL
+           | KEY_STR
+           | KEY_BYTE
+?literal   : number
+           | boolean
+           | string
+           | byte
+           | vector
 number     : LIT_NUM
 byte       : LIT_BYTE
 string     : LIT_STR
