@@ -1,0 +1,46 @@
+# nymph
+# ==========
+# comments are created using the `#` character
+
+# Assignment
+# <type> <name> := <expr>
+
+int x := 10
+
+# Types
+# - string
+# - int
+# - double
+# - bool
+# - byte
+# - int8-128
+# Special: null
+
+# Object types
+# - vec (~array)
+# - map (~dict)
+# - frame (~data.frame, ~matrix)
+# - struct (~class)
+# - func
+
+# Operators
+# Arithmetc:  +, -, *, /, %, ^
+# Logical:    and, or, !, ==, !=, >, >=, <, <=
+# Bitwise:    &, |, <<, >>, ~, xor
+# Assignment: +=, -=, *=, /=, %=
+# Unary:      ++, --
+# Helpers:    |> (pipe)
+
+struct Point {
+    double x
+    double y
+    func distance(Point p) : double
+}
+
+func Point::distance(Point p) : double {
+    return math::sqrt(
+        ((p.x - this.x) ^ 2) + ((p.y - this.y) ^ 2)
+    )
+}
+
+frame df := frame(x = vec(1, 2, 3), y = vec(5, 6, 4))

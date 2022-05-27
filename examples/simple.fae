@@ -1,0 +1,2 @@
+int some_int := 1
+str some_str := "test"
