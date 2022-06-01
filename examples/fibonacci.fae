@@ -1,5 +1,11 @@
-# a function
-fib <- (int x) : int => {
+# This is a simple Fibonacci program built in Faerie.
+
+#>>
+Get a Fibonacci number by index
+@param x Index of Fibonacci number to get
+<<#
+
+func fib <- (int x, int maxiter = 5) : int => {
     if x < 3 {
         # Needs a starting value
         return 1
@@ -8,28 +14,17 @@ fib <- (int x) : int => {
         Fibonacci is a recursive function,
         so it calls itself to continue
         <<#
+        print("recursing")
         return fib(x - 1) + fib(x - 2)
     }
-} # end fib
-
-# a procedure
-shout <- (str x, int y) => {
-    print(x)
 }
 
-printer <- (str name, int start = 0) => {
-    for i in 2 {
-        print(name)
-        print(i)
-    }
+if x > 3 {
+    print("hi")
+} else if x > 4 {
+    print("hi2")
+} else if x > 5 {
+    print("hi3")
 }
 
-fib(40)
-
-#>>
-function expr:
-
-<identifier> => (<type> <identifier>, ...) [: <return-type>] {
-    <expr>
-}
-<<#
+fib(40, maxiter=3)

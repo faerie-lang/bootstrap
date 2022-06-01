@@ -1,8 +1,10 @@
 int some_int <- [1]
 int some_int2 <- 1
 str some_str <- "test"
+bool abool <- false
+int int_vec <- [some_int, 2, 2, 3]
 
-int int_vec <- [1, 2, 3]
+str str_vec <- ["hello", "world", ":)"]
 
 # this evals to true
 print(some_int == some_int2)

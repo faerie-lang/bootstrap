@@ -1,5 +1,5 @@
 import enum
-from faerie._token import Token
+from archive._token import Token
 import re
 
 

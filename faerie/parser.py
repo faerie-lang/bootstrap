@@ -1,6 +1,7 @@
 from sys import argv
-from lark import Lark
+from lark import Lark, tree
 from pathlib import Path
+from compiler import transformers
 
 
 def grammar(path: str):
@@ -16,4 +17,8 @@ if __name__ == "__main__":
         string = f.read()
 
     # Print pretty parse tree
-    print(l.parse(string).pretty())
+    parsed = l.parse(string)
+    # print(parsed.pretty())
+    x = transformers.StepOneTransformer().transform(parsed)
+    x = transformers.StepTwoTransformer().transform(x)
+    print(x.pretty())
